@@ -1,0 +1,44 @@
+#!/bin/sh
+
+if [ -n "$1" ]; then
+  VENDOR=$1
+else
+  echo Usage: $0 vendor_code
+  exit 1
+fi
+
+DIR=/m1/voyager/ucladb/local/pia/marc/loaded
+
+case ${VENDOR} in
+  # Maybe need to distinguish between YBP ucla and YBP uclalaw?  Otherwise, logic is same for all vendors
+  CIB) PATTERN="pia_${VENDOR}_*phase_1.log" ;;
+  YBP) PATTERN="pia_${VENDOR}_*phase_1.log" ;;
+  *  ) echo Invalid vendor code $VENDOR - exiting
+       exit 1
+       ;;
+esac
+
+ADD_TOTAL=0
+REJ_TOTAL=0
+#PRO_TOTAL=0
+ADD_MSG="Added:         "
+REJ_MSG="Discarded:     "
+#PRO_MSG="Processed:     "
+
+FILES=${DIR}/${PATTERN}
+for FILE in ${FILES}; do
+  ADD=`grep ${ADD_MSG} ${FILE} | sed "s/${ADD_MSG}//"`
+  ADD_TOTAL=`expr ${ADD_TOTAL} + ${ADD}`
+  REJ=`grep ${REJ_MSG} ${FILE} | sed "s/${REJ_MSG}//"`
+  REJ_TOTAL=`expr ${REJ_TOTAL} + ${REJ}`
+#  PRO=`grep ${PRO_MSG} ${FILE} | sed "s/${PRO_MSG}//"`
+#  PRO_TOTAL=`expr ${PRO_TOTAL} + ${PRO}`
+done
+TOTAL=`expr ${ADD_TOTAL} + ${REJ_TOTAL}`
+TODAY=`date "+%b %e %Y"`
+echo PIA loads for ${VENDOR} as of ${TODAY}
+echo Total records received  : ${TOTAL}
+echo Records loaded in OPAC  : ${ADD_TOTAL}
+echo Records rejected as dups: ${REJ_TOTAL}
+#echo Records processed: ${PRO_TOTAL}
+
