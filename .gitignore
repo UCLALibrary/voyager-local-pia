@@ -2,3 +2,5 @@
 marc/
 requests/
 
+# Ignore log files
+*.log
