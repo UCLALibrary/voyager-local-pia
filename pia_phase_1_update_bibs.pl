@@ -4,7 +4,7 @@
 # Discard serial records.
 
 use strict;
-use lib "/opt/local/perl";
+use lib "/usr/local/bin/voyager/perl";
 use MARC::Batch;
 use UCLA_Batch; #for UCLA_Batch::safenext to better handle data errors
 
