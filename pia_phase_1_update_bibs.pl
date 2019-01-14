@@ -20,9 +20,8 @@ my $outputfile = $ARGV[2];
 my $batch = MARC::Batch->new('USMARC', $inputfile);
 $batch->strict_off();
 
-# YBP and CIB PIA records are MARC-8, not UTF-8
-#open OUT, '>:utf8', $outputfile or die "Cannot open output file: $!\n";
-open OUT, '>', $outputfile or die "Cannot open output file: $!\n";
+# YBP and CIB PIA records are now in UTF-8
+open OUT, '>:utf8', $outputfile or die "Cannot open output file: $!\n";
 
 # Create constant 852 with info we need for all records
 my $f852 = MARC::Field->new('852', '', '', b=>'pdacq');
